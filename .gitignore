@@ -137,6 +137,9 @@ assets/temp/
 !assets/demo-*.png
 !assets/demo-*.jpg
 !assets/logo.*
+!assets/demo-landing.jpg
+!assets/demo-gasperini-giornalista.jpg
+!assets/demo-pdf-*.jpg
 
 # Database files (for future use)
 *.db

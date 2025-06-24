@@ -6,19 +6,37 @@ DebateLens è un'applicazione web avanzata che utilizza l'intelligenza artificia
 
 ## 🖼️ Demo dell'Applicazione
 
-### Panoramica Generale e Grafico Radar
-![DebateLens Overview](./assets/demo-overview.png.jpg)
+### 🏠 Landing Page - Interfaccia Principale
+![DebateLens Landing](./assets/landing.png)
 
-### Analisi Dettagliata per Speaker
+> **Interfaccia Utente**: La landing page presenta due opzioni principali per l'analisi:
+> - **📹 Analisi Video**: Inserisci URL YouTube o carica file audio/video locali
+> - **📝 Analisi Testo**: Incolla direttamente il testo del dibattito da analizzare
+> 
+> L'interfaccia è pulita e intuitiva, con form separati per ogni modalità di analisi.
+
+### 📊 Pagina Risultati - Caso Studio: Gasperini vs Giornalista
+![DebateLens Results](./assets/gasperini_giornalista.png)
+
+> **Caso Particolare**: Questo esempio mostra l'analisi di un'intervista dove il giornalista ha fatto solo **domande secche** senza argomentazioni proprie. Il sistema ha correttamente assegnato **punteggio 1.0/10** in tutte le categorie al giornalista, dimostrando la precisione dell'AI nel distinguere tra chi argomenta e chi si limita a porre domande.
+
+### 📄 Export PDF Professionale
 <div align="center">
-  <img src="./assets/demo-meloni.png.jpg" alt="Analisi Giorgia Meloni" width="45%" />
-  <img src="./assets/demo-conte.png.jpg" alt="Analisi Giuseppe Conte" width="45%" />
+  <img src="./assets/demo-overview.jpg" alt="PDF Pagina 1 - Overview" width="45%" />
+  <img src="./assets/demo-meloni.jpg" alt="PDF Pagina 2 - Meloni" width="45%" />
+</div>
+<div align="center">
+  <img src="./assets/demo-conte.jpg" alt="PDF Pagina 3 - Conte" width="45%" />
+  <img src="./assets/demo-summary.jpg" alt="PDF Pagina 4 - Summary" width="45%" />
 </div>
 
-### Riepilogo Comparativo Finale
-![DebateLens Summary](./assets/demo-summary.png.jpg)
-
-> **Esempio di Analisi**: Le immagini sopra mostrano un'analisi reale del dibattito "Giorgia Meloni vs Giuseppe Conte" con punteggi dettagliati per ogni metrica. Il sistema ha valutato Meloni con una media di **6.7/10** e Conte con **5.3/10**, evidenziando differenze significative in rigore tecnico, uso di dati e orientamento pratico.
+> **Export Professionale**: Il sistema genera automaticamente un PDF completo con:
+> - **Pagina 1**: Copertina con informazioni generali e grafico radar comparativo
+> - **Pagina 2**: Analisi dettagliata Giorgia Meloni con punteggi colorati
+> - **Pagina 3**: Analisi dettagliata Giuseppe Conte con punteggi colorati  
+> - **Pagina 4**: Riepilogo finale con tabella comparativa e conclusioni
+> 
+> Il PDF è ottimizzato per la stampa e la condivisione professionale.
 
 ## ✨ Caratteristiche Principali
 
@@ -43,9 +61,10 @@ DebateLens è un'applicazione web avanzata che utilizza l'intelligenza artificia
 ### 📈 **Visualizzazione**
 - **Grafici Radar**: Confronto interattivo delle performance con visualizzazione esagonale
 - **Tabelle Dettagliate**: Punteggi colorati e spiegazioni per ogni categoria
-- **Export PDF**: Report professionali completi con grafici ad alta risoluzione
+- **Export PDF Multi-pagina**: Report professionali con 4 pagine complete
 - **Download Trascrizioni**: File TXT con analisi complete
-- **Riepilogo Comparativo**: Tabella finale con medie generali per speaker
+- **Riconoscimento Intelligente**: Distingue tra argomentatori e intervistatori
+- **Interfaccia Dual-Mode**: Supporto sia video che testo con UI dedicata
 
 ## 🚀 Installazione e Setup
 
@@ -146,10 +165,12 @@ debatelens/
 ├── ⚙️ config.js               # Configurazione
 ├── 📦 package.json            # Dipendenze Node.js
 ├── 🖼️ assets/                 # Immagini e demo
-│   ├── demo-overview.png.jpg  # Screenshot panoramica
-│   ├── demo-meloni.png.jpg    # Analisi speaker 1
-│   ├── demo-conte.png.jpg     # Analisi speaker 2
-│   └── demo-summary.png.jpg   # Riepilogo finale
+│   ├── landing.png            # Landing page principale
+│   ├── gasperini_giornalista.png # Pagina risultati
+│   ├── demo-overview.jpg      # PDF export - Pagina 1 (Overview)
+│   ├── demo-meloni.jpg        # PDF export - Pagina 2 (Meloni)
+│   ├── demo-conte.jpg         # PDF export - Pagina 3 (Conte)
+│   └── demo-summary.jpg       # PDF export - Pagina 4 (Summary)
 ├── 🔧 routes/                 # API endpoints
 │   ├── analysis.js            # Endpoint analisi
 │   ├── upload.js              # Gestione upload
