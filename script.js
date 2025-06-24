@@ -2,6 +2,9 @@
 // DebateLens - Script JavaScript per la Landing Page
 // ============================================================================
 
+// Variabili globali
+let currentAnalysisId = null;
+
 document.addEventListener('DOMContentLoaded', function() {
     initializeApp();
 });
@@ -178,48 +181,73 @@ window.clearFileSelection = function() {
 function initFormSubmission() {
     const form = document.getElementById('analysisForm');
     
-    if (!form) return;
+    console.log('🔍 Inizializzazione form:', form);
+    
+    if (!form) {
+        console.error('❌ Form analysisForm non trovato!');
+        return;
+    }
     
     form.addEventListener('submit', handleFormSubmit);
+    console.log('✅ Event listener aggiunto al form');
 }
 
 async function handleFormSubmit(e) {
+    console.log('🚀 Form submit triggered!', e);
     e.preventDefault();
     
     const submitButton = e.target.querySelector('button[type="submit"]');
-    const buttonText = submitButton.querySelector('.btn-text');
-    const buttonLoader = submitButton.querySelector('.btn-loader');
+    console.log('🔘 Submit button:', submitButton);
+    
+    const buttonText = submitButton?.querySelector('.btn-text');
+    const buttonLoader = submitButton?.querySelector('.btn-loader');
+    
+    console.log('📝 Button elements:', { buttonText, buttonLoader });
     
     // Validazione form
     if (!validateForm()) {
+        console.log('❌ Validazione form fallita');
         return;
     }
+    
+    console.log('✅ Validazione form passata');
     
     // Mostra loading
     showLoading(submitButton, buttonText, buttonLoader);
     
     try {
-        // Simula processamento (in una versione reale, qui faresti la chiamata API)
-        await simulateAnalysis();
+        // Chiamata API reale
+        const analysisId = await submitToAPI();
         
-        // Mostra risultato di successo
-        showSuccess();
+        // Salva l'ID per i pulsanti export
+        currentAnalysisId = analysisId;
+        
+        // Reindirizza ai risultati
+        showNotification('✅ Analisi avviata! Reindirizzamento ai risultati...', 'success');
+        
+        setTimeout(() => {
+            window.location.href = `/api/results/${analysisId}`;
+        }, 1500);
         
     } catch (error) {
         console.error('Errore durante l\'analisi:', error);
-        showNotification('Errore durante l\'analisi. Riprova più tardi.', 'error');
-    } finally {
-        // Nascondi loading
+        showNotification(error.message || 'Errore durante l\'analisi. Riprova più tardi.', 'error');
         hideLoading(submitButton, buttonText, buttonLoader);
     }
 }
 
 function validateForm() {
-    const activeTab = document.querySelector('.tab-btn.active').getAttribute('data-tab');
+    const activeTab = document.querySelector('.tab-btn.active')?.getAttribute('data-tab');
+    console.log('🔍 Active tab:', activeTab);
     
     if (activeTab === 'video') {
-        const videoUrl = document.getElementById('videoUrl').value.trim();
-        const videoFile = document.getElementById('videoFile').files[0];
+        const videoUrlEl = document.getElementById('videoUrl');
+        const videoFileEl = document.getElementById('videoFile');
+        
+        console.log('📹 Video elements:', { videoUrlEl, videoFileEl });
+        
+        const videoUrl = videoUrlEl?.value?.trim() || '';
+        const videoFile = videoFileEl?.files?.[0];
         
         if (!videoUrl && !videoFile) {
             showNotification('Inserisci un URL YouTube o carica un file video/audio', 'error');
@@ -232,8 +260,13 @@ function validateForm() {
         }
         
     } else if (activeTab === 'text') {
-        const textContent = document.getElementById('textContent').value.trim();
-        const speakers = document.getElementById('speakers').value.trim();
+        const textContentEl = document.getElementById('textContent');
+        const speakersEl = document.getElementById('textSpeakers');
+        
+        console.log('📝 Text elements:', { textContentEl, speakersEl });
+        
+        const textContent = textContentEl?.value?.trim() || '';
+        const speakers = speakersEl?.value?.trim() || '';
         
         if (!textContent) {
             showNotification('Inserisci il testo da analizzare', 'error');
@@ -289,12 +322,91 @@ function hideLoading(button, textElement, loaderElement) {
     button.style.opacity = '1';
 }
 
-function showSuccess() {
-    // In una versione reale, qui reindirizzeresti alla pagina dei risultati
-    showNotification('Analisi completata con successo! In una versione completa verresti reindirizzato ai risultati.', 'success');
+async function submitToAPI() {
+    const activeTab = document.querySelector('.tab-btn.active').getAttribute('data-tab');
     
-    // Scroll verso l'alto per mostrare la notifica
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    if (activeTab === 'video') {
+        const videoUrl = document.getElementById('videoUrl').value.trim();
+        const videoFile = document.getElementById('videoFile').files[0];
+        const speakers = document.getElementById('videoSpeakers').value.trim();
+        const topic = document.getElementById('videoTopic').value.trim();
+        const title = document.getElementById('videoTitle').value.trim();
+        
+        if (videoUrl) {
+            // Analisi YouTube
+            const response = await fetch('/api/analysis/youtube', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    url: videoUrl,
+                    speakers: speakers.split(',').map(s => s.trim()).filter(s => s),
+                    topic: topic,
+                    title: title || 'Video YouTube',
+                    language: 'it'
+                })
+            });
+            
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error(result.error || 'Errore durante l\'analisi YouTube');
+            }
+            
+            return result.analysis_id;
+            
+        } else if (videoFile) {
+            // Upload file
+            const formData = new FormData();
+            formData.append('file', videoFile);
+            formData.append('speakers', JSON.stringify(speakers.split(',').map(s => s.trim()).filter(s => s)));
+            formData.append('topic', topic);
+            formData.append('title', title || videoFile.name);
+            formData.append('language', 'it');
+            
+            const response = await fetch('/api/upload', {
+                method: 'POST',
+                body: formData
+            });
+            
+            const result = await response.json();
+            
+            if (!result.success) {
+                throw new Error(result.error || 'Errore durante l\'upload del file');
+            }
+            
+            return result.analysis_id;
+        }
+        
+    } else {
+        // Analisi testo
+        const textContent = document.getElementById('textContent').value.trim();
+        const speakers = document.getElementById('textSpeakers').value.trim();
+        const topic = document.getElementById('textTopic').value.trim();
+        const title = document.getElementById('textTitle').value.trim();
+        
+        const response = await fetch('/api/analysis/text', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                text: textContent,
+                speakers: speakers.split(',').map(s => s.trim()).filter(s => s),
+                topic: topic,
+                title: title || 'Analisi Testo'
+            })
+        });
+        
+        const result = await response.json();
+        
+        if (!result.success) {
+            throw new Error(result.error || 'Errore durante l\'analisi del testo');
+        }
+        
+        return result.analysis_id;
+    }
 }
 
 // ============================================================================
@@ -507,6 +619,178 @@ window.scrollToAnalyze = function() {
 window.showDemo = function() {
     showNotification('Demo non ancora disponibile. Questa è una versione pilota del progetto!', 'info');
 };
+
+// =============================================================================
+// Funzioni Export e Download
+// =============================================================================
+
+/**
+ * Scarica la trascrizione completa
+ */
+async function downloadTranscript(analysisId) {
+    try {
+        const response = await fetch(`/api/results/${analysisId}/transcript`);
+        const result = await response.json();
+        
+        if (!result.success) {
+            throw new Error(result.error);
+        }
+        
+        const { transcript, wordCount, duration, createdAt } = result.data;
+        
+        // Crea il contenuto del file
+        const content = `
+TRASCRIZIONE DEBATELENS
+=======================
+
+📊 Informazioni Analisi:
+- ID: ${analysisId}
+- Data: ${new Date(createdAt).toLocaleString('it-IT')}
+- Durata: ${duration ? Math.round(duration) + ' minuti' : 'N/A'}
+- Parole: ${wordCount}
+
+📝 TRASCRIZIONE COMPLETA:
+${transcript}
+
+---
+Generato da DebateLens - https://debatelens.app
+        `;
+        
+        // Crea e scarica il file
+        const blob = new Blob([content], { type: 'text/plain;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `trascrizione_${analysisId}_${new Date().toISOString().slice(0, 10)}.txt`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+        
+        showNotification('✅ Trascrizione scaricata con successo!', 'success');
+        
+    } catch (error) {
+        console.error('Errore download trascrizione:', error);
+        showNotification('❌ Errore durante il download della trascrizione', 'error');
+    }
+}
+
+/**
+ * Esporta i grafici in PDF
+ */
+async function exportToPDF(analysisId) {
+    try {
+        showNotification('📑 Generazione PDF in corso...', 'info');
+        
+        const { jsPDF } = window.jspdf;
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        
+        // Informazioni del documento
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        let yPosition = 20;
+        
+        // Intestazione
+        pdf.setFontSize(20);
+        pdf.setTextColor(44, 62, 80);
+        pdf.text('📊 ANALISI DIBATTITO - DEBATELENS', pageWidth / 2, yPosition, { align: 'center' });
+        
+        yPosition += 15;
+        pdf.setFontSize(12);
+        pdf.setTextColor(108, 117, 125);
+        pdf.text(`ID Analisi: ${analysisId}`, pageWidth / 2, yPosition, { align: 'center' });
+        pdf.text(`Data: ${new Date().toLocaleDateString('it-IT')}`, pageWidth / 2, yPosition + 5, { align: 'center' });
+        
+        yPosition += 20;
+        
+        // Cattura i grafici radar
+        const radarCharts = document.querySelectorAll('canvas[id*="radarChart"]');
+        
+        for (let i = 0; i < radarCharts.length; i++) {
+            const canvas = radarCharts[i];
+            const speakerName = canvas.id.replace('radarChart', '');
+            
+            // Aggiungi nuova pagina se necessario
+            if (i > 0) {
+                pdf.addPage();
+                yPosition = 20;
+            }
+            
+            // Titolo del grafico
+            pdf.setFontSize(16);
+            pdf.setTextColor(44, 62, 80);
+            pdf.text(`📈 Analisi: ${speakerName}`, 20, yPosition);
+            yPosition += 15;
+            
+            // Converti canvas in immagine
+            const imgData = canvas.toDataURL('image/png', 1.0);
+            const imgWidth = 160;
+            const imgHeight = 120;
+            
+            pdf.addImage(imgData, 'PNG', (pageWidth - imgWidth) / 2, yPosition, imgWidth, imgHeight);
+            yPosition += imgHeight + 10;
+        }
+        
+        // Aggiungi grafico di confronto se presente
+        const comparisonChart = document.querySelector('#comparisonChart');
+        if (comparisonChart) {
+            pdf.addPage();
+            yPosition = 20;
+            
+            pdf.setFontSize(16);
+            pdf.setTextColor(44, 62, 80);
+            pdf.text('📊 Confronto Diretto', 20, yPosition);
+            yPosition += 15;
+            
+            const imgData = comparisonChart.toDataURL('image/png', 1.0);
+            const imgWidth = 160;
+            const imgHeight = 120;
+            
+            pdf.addImage(imgData, 'PNG', (pageWidth - imgWidth) / 2, yPosition, imgWidth, imgHeight);
+        }
+        
+        // Footer
+        const totalPages = pdf.internal.getNumberOfPages();
+        for (let i = 1; i <= totalPages; i++) {
+            pdf.setPage(i);
+            pdf.setFontSize(8);
+            pdf.setTextColor(150, 150, 150);
+            pdf.text(`Pagina ${i} di ${totalPages} - Generato da DebateLens`, pageWidth / 2, pageHeight - 10, { align: 'center' });
+        }
+        
+        // Salva il PDF
+        pdf.save(`analisi_dibattito_${analysisId}_${new Date().toISOString().slice(0, 10)}.pdf`);
+        
+        showNotification('✅ PDF esportato con successo!', 'success');
+        
+    } catch (error) {
+        console.error('Errore export PDF:', error);
+        showNotification('❌ Errore durante l\'esportazione PDF', 'error');
+    }
+}
+
+// Event listeners per i pulsanti export
+document.addEventListener('DOMContentLoaded', function() {
+    // Pulsante download trascrizione
+    document.getElementById('download-transcript')?.addEventListener('click', function() {
+        const analysisId = this.dataset.analysisId || currentAnalysisId;
+        if (analysisId) {
+            downloadTranscript(analysisId);
+        } else {
+            showNotification('❌ ID analisi non disponibile', 'error');
+        }
+    });
+    
+    // Pulsante export PDF
+    document.getElementById('export-pdf')?.addEventListener('click', function() {
+        const analysisId = this.dataset.analysisId || currentAnalysisId;
+        if (analysisId) {
+            exportToPDF(analysisId);
+        } else {
+            showNotification('❌ ID analisi non disponibile', 'error');
+        }
+    });
+});
 
 // ============================================================================
 // Console welcome message

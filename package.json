@@ -1,0 +1,52 @@
+{
+  "name": "debatelens",
+  "version": "1.0.0",
+  "description": "🔍 AI-powered debate analysis webapp - Rizzo AI Academy",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "nodemon server.js",
+    "install-whisper": "node install-whisper.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "ai",
+    "debate",
+    "analysis",
+    "nlp",
+    "openrouter",
+    "transcription"
+  ],
+  "author": "Rizzo AI Academy",
+  "license": "MIT",
+  "dependencies": {
+    "@distube/ytdl-core": "^4.16.12",
+    "axios": "^1.6.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "express": "^4.18.2",
+    "express-rate-limit": "^7.1.5",
+    "fluent-ffmpeg": "^2.1.2",
+    "helmet": "^7.1.0",
+    "morgan": "^1.10.0",
+    "multer": "^1.4.5-lts.1",
+    "node-schedule": "^2.1.1",
+    "sqlite3": "^5.1.6",
+    "uuid": "^9.0.1",
+    "ytdl-core": "^4.11.5"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Rizzo-AI-Academy/DebateLens.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Rizzo-AI-Academy/DebateLens/issues"
+  },
+  "homepage": "https://github.com/Rizzo-AI-Academy/DebateLens#readme"
+}

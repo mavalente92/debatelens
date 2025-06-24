@@ -1,222 +1,262 @@
-# 🔍 DebateLens
+# 🎯 DebateLens
 
 **Analisi Intelligente dei Dibattiti con AI**
 
-Una webapp moderna e minimale per analizzare e confrontare il modo in cui due o più soggetti si esprimono durante dibattiti politici, scientifici, divulgativi o mediatici.
+DebateLens è un'applicazione web avanzata che utilizza l'intelligenza artificiale per analizzare e confrontare le performance comunicative dei partecipanti in dibattiti politici, scientifici e mediatici.
 
-![DebateLens Banner](https://via.placeholder.com/800x400/6366f1/ffffff?text=DebateLens+AI+Analysis)
-
-## 📋 Panoramica del Progetto
-
-DebateLens è un progetto didattico nato all'interno della **Rizzo AI Academy** per creare una soluzione che utilizza modelli linguistici avanzati per:
-
-- **Analizzare** video e testi di dibattiti
-- **Confrontare** stili comunicativi e approcci argomentativi
-- **Visualizzare** i risultati attraverso grafici radar interattivi
-- **Valutare** rigore tecnico, uso di dati, focalizzazione e orientamento pratico
+![DebateLens Demo](https://via.placeholder.com/800x400/0f172a/ffffff?text=DebateLens+Demo)
 
 ## ✨ Caratteristiche Principali
 
 ### 🎥 **Analisi Multi-formato**
-- **Video YouTube**: Inserisci un URL e analizza automaticamente
-- **File Audio/Video**: Carica file locali (MP4, MP3, WAV)
-- **Testo Diretto**: Incolla trascrizioni o articoli da analizzare
+- **Video YouTube**: Analisi diretta da URL YouTube
+- **File Audio/Video**: Upload di file locali (MP4, MP3, WAV)
+- **Testo**: Analisi diretta di trascrizioni o articoli
 
 ### 🤖 **AI Avanzata**
-- Trascrizione automatica con tecnologie speech-to-text
-- Analisi semantica approfondita con modelli linguistici
-- Metriche personalizzate per diverse tipologie di dibattito
+- **Modello**: Google Gemini 2.0 Flash (gratuito via OpenRouter)
+- **Trascrizione**: Whisper locale (nessun costo API)
+- **Analisi**: 6 metriche di valutazione approfondite
 
-### 📊 **Visualizzazione Moderna**
-- Grafici radar per confronti visivi immediati
-- Interface responsive e accessibile
-- Design minimale e user-friendly
+### 📊 **Metriche di Valutazione**
+1. **Rigore Tecnico**: Precisione e accuratezza delle informazioni
+2. **Uso di Dati**: Quantità e qualità di statistiche e fonti
+3. **Stile Comunicativo**: Chiarezza ed efficacia della comunicazione
+4. **Focalizzazione**: Aderenza al topic e coerenza argomentativa
+5. **Orientamento Pratico**: Concretezza delle proposte
+6. **Approccio Divulgativo**: Capacità di rendere accessibili concetti complessi
 
-### ⚡ **Performance Ottimizzate**
-- Caricamento rapido con vanilla JavaScript
-- CSS moderno con variabili custom
-- Supporto per dark mode automatico
+### 📈 **Visualizzazione**
+- **Grafici Radar**: Confronto interattivo delle performance
+- **Tabelle Dettagliate**: Punteggi e spiegazioni per categoria
+- **Export PDF**: Report professionali completi
+- **Download Trascrizioni**: File TXT con analisi complete
 
-## 🚀 Come Iniziare
+## 🚀 Installazione e Setup
 
-### Requisiti
-- Browser moderno (Chrome, Firefox, Safari, Edge)
-- Connessione internet per i font e eventuali API
+### Prerequisiti
+- **Node.js** 16+ 
+- **Python** 3.8+ (per Whisper)
+- **FFmpeg** (per elaborazione audio/video)
 
-### Installazione Locale
-
-1. **Clona il repository**
+### 1. Clone del Repository
 ```bash
-git clone https://github.com/TUO-USERNAME/DebateLens.git
-cd DebateLens
+git clone https://github.com/tuousername/debatelens.git
+cd debatelens
 ```
 
-2. **Apri il progetto**
+### 2. Installazione Dipendenze Node.js
 ```bash
-# Apri direttamente index.html nel browser
-open index.html
-
-# Oppure usa un server locale (raccomandato)
-python -m http.server 8000
-# Poi vai su http://localhost:8000
+npm install
 ```
 
-3. **Inizia ad analizzare!**
-   - Apri la webapp nel browser
-   - Scegli tra analisi video o testo
-   - Carica il contenuto da analizzare
-   - Visualizza i risultati
+### 3. Installazione FFmpeg
+**Windows (con winget):**
+```bash
+winget install --id=Gyan.FFmpeg
+```
+
+**macOS (con Homebrew):**
+```bash
+brew install ffmpeg
+```
+
+**Ubuntu/Debian:**
+```bash
+sudo apt update
+sudo apt install ffmpeg
+```
+
+### 4. Installazione Whisper
+```bash
+pip install openai-whisper
+```
+
+### 5. Configurazione
+1. Copia il file di configurazione:
+```bash
+cp config.example.js config.js
+```
+
+2. Modifica `config.js` con le tue credenziali:
+```javascript
+module.exports = {
+    openrouter: {
+        apiKey: 'TUA_API_KEY_OPENROUTER', // Gratuita da https://openrouter.ai
+        model: 'google/gemini-2.0-flash-exp:free'
+    },
+    whisper: {
+        model: 'base', // tiny, base, small, medium, large
+        language: 'it'
+    }
+};
+```
+
+### 6. Avvio del Server
+```bash
+npm start
+```
+
+L'applicazione sarà disponibile su: `http://localhost:3000`
+
+## 🔧 Configurazione Avanzata
+
+### Variabili d'Ambiente
+Crea un file `.env` per configurazioni personalizzate:
+```env
+PORT=3000
+NODE_ENV=development
+OPENROUTER_API_KEY=your_api_key_here
+WHISPER_MODEL=base
+UPLOAD_MAX_SIZE=100mb
+RATE_LIMIT_MAX=100
+RATE_LIMIT_WINDOW=900000
+```
+
+### Modelli Whisper Disponibili
+- `tiny`: Veloce, meno accurato (39 MB)
+- `base`: Bilanciato (74 MB)
+- `small`: Buona accuratezza (244 MB)
+- `medium`: Alta accuratezza (769 MB)
+- `large`: Massima accuratezza (1550 MB)
 
 ## 📁 Struttura del Progetto
 
 ```
-DebateLens/
-├── index.html          # Pagina principale
-├── styles.css          # Stili CSS moderni
-├── script.js           # Logica JavaScript
-├── README.md           # Documentazione
-└── assets/             # (futuro) Immagini e risorse
-    ├── images/
-    └── icons/
+debatelens/
+├── 📄 index.html              # Frontend principale
+├── 🎨 styles.css              # Stili CSS
+├── ⚡ script.js               # JavaScript frontend
+├── 🚀 server.js               # Server Express
+├── ⚙️ config.js               # Configurazione
+├── 📦 package.json            # Dipendenze Node.js
+├── 🔧 routes/                 # API endpoints
+│   ├── analysis.js            # Endpoint analisi
+│   ├── upload.js              # Gestione upload
+│   └── results.js             # Visualizzazione risultati
+├── 🤖 services/               # Servizi AI
+│   ├── openrouter.js          # Integrazione OpenRouter
+│   └── transcription.js       # Servizio trascrizione
+├── 🛠️ utils/                  # Utilità
+│   ├── database.js            # Gestione SQLite
+│   └── cleanup.js             # Pulizia file temporanei
+├── 📁 temp/                   # File temporanei
+├── 📁 uploads/                # File caricati
+└── 📁 data/                   # Database SQLite
 ```
 
-## 🎨 Design System
+## 🔗 API Endpoints
 
-### Colori
-- **Primary**: `#6366f1` (Indaco moderno)
-- **Secondary**: `#f1f5f9` (Grigio chiaro)
-- **Accent**: `#10b981` (Verde successo)
-- **Background**: `#ffffff` (Bianco pulito)
+### Analisi
+- `POST /api/analysis/text` - Analisi testo
+- `POST /api/analysis/youtube` - Analisi video YouTube
+- `POST /api/analysis/upload` - Analisi file caricato
 
-### Tipografia
-- **Font**: Inter (Google Fonts)
-- **Pesi**: 300, 400, 500, 600, 700
-- **Scale**: Sistema armonico basato su rem
+### Risultati
+- `GET /api/results/:id` - Visualizza risultati
+- `GET /api/results/:id/transcript` - Download trascrizione
 
-### Componenti
-- **Buttons**: Stati hover con transform e shadow
-- **Forms**: Focus states con border colorati
-- **Cards**: Shadow soft con hover effects
-- **Animations**: Transizioni smooth con cubic-bezier
+### Utilità
+- `GET /api/health` - Health check
+- `POST /api/upload` - Upload file
 
-## 🔧 Funzionalità Tecniche
+## 🎯 Esempi di Utilizzo
 
-### HTML Semantico
-- Struttura accessibile con ARIA labels
-- Meta tags per SEO e social sharing
-- Markup pulito e validato
-
-### CSS Moderno
-- Custom Properties (CSS Variables)
-- CSS Grid e Flexbox per layout
-- Media queries per responsività
-- Supporto dark mode con `prefers-color-scheme`
-
-### JavaScript Vanilla
-- Event delegation per performance
-- Intersection Observer per animazioni scroll
-- File API per drag & drop
-- Promise-based per operazioni async
-
-## 📱 Responsività
-
-Il design è completamente responsive e ottimizzato per:
-- **Desktop**: Layout a due colonne, navigazione orizzontale
-- **Tablet**: Layout adattivo con componenti ridimensionati
-- **Mobile**: Single column, navigazione verticale, touch-friendly
-
-## 🎯 Metriche di Analisi
-
-DebateLens valuta i partecipanti secondo queste dimensioni:
-
-1. **Rigore Tecnico** - Precisione e accuratezza delle informazioni
-2. **Uso di Dati** - Quantità e qualità di dati oggettivi citati
-3. **Stile Comunicativo** - Chiarezza e efficacia della comunicazione
-4. **Focalizzazione** - Aderenza al topic e struttura argomentativa
-5. **Orientamento Pratico** - Applicabilità e concretezza delle proposte
-6. **Approccio Divulgativo** - Capacità di rendere accessibili concetti complessi
-
-## 🔮 Roadmap Futura
-
-### Fase 1 - MVP ✅
-- [x] Landing page funzionale
-- [x] Form di upload
-- [x] Design responsive
-- [x] Validazione client-side
-
-### Fase 2 - Backend Integration
-- [ ] API per trascrizione video
-- [ ] Integrazione modelli AI (GPT-4, Gemini)
-- [ ] Database per storing risultati
-- [ ] Sistema di autenticazione
-
-### Fase 3 - Funzionalità Avanzate
-- [ ] Grafici radar interattivi con Chart.js
-- [ ] Export risultati in PDF
-- [ ] Confronti storici
-- [ ] Dashboard analytics
-
-### Fase 4 - Scalabilità
-- [ ] Deployment su Railway/Vercel
-- [ ] CDN per assets
-- [ ] Monitoring e analytics
-- [ ] API pubblica
-
-## 🤝 Contribuire
-
-Questo è un progetto didattico aperto alla collaborazione!
-
-### Come Contribuire
-1. **Fork** il repository
-2. **Crea** un branch per la tua feature (`git checkout -b feature/AmazingFeature`)
-3. **Commit** le tue modifiche (`git commit -m 'Add some AmazingFeature'`)
-4. **Push** al branch (`git push origin feature/AmazingFeature`)
-5. **Apri** una Pull Request
-
-### Aree di Contribuzione
-- 🎨 **Design**: Miglioramenti UI/UX
-- 💻 **Frontend**: Nuove funzionalità JavaScript
-- 🔧 **Backend**: Integrazione API e database
-- 📝 **Documentazione**: Guide e tutorial
-- 🧪 **Testing**: Unit e integration tests
-
-## 📄 Licenza
-
-Questo progetto è rilasciato sotto licenza **MIT**.
-
-```
-MIT License
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+### Analisi Video YouTube
+```javascript
+const response = await fetch('/api/analysis/youtube', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        url: 'https://youtube.com/watch?v=...',
+        speakers: ['Mario Rossi', 'Giulia Bianchi'],
+        topic: 'Intelligenza Artificiale',
+        title: 'Dibattito AI 2024'
+    })
+});
 ```
 
-## 👥 Team
+### Analisi Testo
+```javascript
+const response = await fetch('/api/analysis/text', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+        text: 'Testo del dibattito...',
+        speakers: ['Speaker 1', 'Speaker 2'],
+        topic: 'Argomento del dibattito'
+    })
+});
+```
 
-**Rizzo AI Academy**
-- 🎓 Progetto didattico per apprendimento full-stack
-- 🤖 Focus su AI e tecnologie moderne
-- 🌐 Community di sviluppatori in crescita
+## 🛡️ Sicurezza
 
-## 📞 Contatti
+- **Rate Limiting**: 100 richieste per 15 minuti
+- **Content Security Policy**: Headers di sicurezza configurati
+- **Validazione Input**: Tutti gli input sono validati
+- **CORS**: Configurazione CORS appropriata
+- **File Upload**: Limitazioni su tipo e dimensione file
 
-- **GitHub**: [Rizzo-AI-Academy/DebateLens](https://github.com/Rizzo-AI-Academy/DebateLens)
-- **Website**: [DebateLens.app](https://debatelens.app) _(coming soon)_
-- **Community**: Rizzo AI Academy Discord
+## 🔧 Troubleshooting
+
+### Errori Comuni
+
+**1. FFmpeg non trovato**
+```bash
+# Verifica installazione
+ffmpeg -version
+
+# Aggiungi al PATH se necessario (Windows)
+setx PATH "%PATH%;C:\path\to\ffmpeg\bin"
+```
+
+**2. Whisper non funziona**
+```bash
+# Reinstalla Whisper
+pip uninstall openai-whisper
+pip install openai-whisper
+```
+
+**3. Errori di trascrizione YouTube**
+```bash
+# Aggiorna yt-dlp
+pip install --upgrade yt-dlp
+```
+
+**4. Errori di memoria**
+- Usa modelli Whisper più piccoli (`tiny` o `base`)
+- Riduci la qualità video di input
+- Aumenta la RAM disponibile
+
+## 🤝 Contributi
+
+I contributi sono benvenuti! Per contribuire:
+
+1. Fork del repository
+2. Crea un branch feature (`git checkout -b feature/nuova-funzionalita`)
+3. Commit delle modifiche (`git commit -am 'Aggiunge nuova funzionalità'`)
+4. Push del branch (`git push origin feature/nuova-funzionalita`)
+5. Apri una Pull Request
+
+## 📝 Licenza
+
+Questo progetto è rilasciato sotto licenza MIT. Vedi il file [LICENSE](LICENSE) per i dettagli.
+
+## 🙏 Ringraziamenti
+
+- **OpenRouter** per l'accesso gratuito ai modelli AI
+- **OpenAI** per Whisper
+- **Google** per Gemini 2.0 Flash
+- **Chart.js** per i grafici radar
+- **jsPDF** per l'export PDF
+
+## 📞 Supporto
+
+Per supporto, bug report o richieste di funzionalità:
+- Apri un [Issue](https://github.com/tuousername/debatelens/issues)
+- Email: support@debatelens.com
+- Discord: [DebateLens Community](https://discord.gg/debatelens)
 
 ---
 
-<div align="center">
-
-**Made with ❤️ by Rizzo AI Academy**
-
-[⭐ Star questo repo](https://github.com/Rizzo-AI-Academy/DebateLens) se ti è utile!
-
-</div> 
+**Sviluppato con ❤️ per l'analisi intelligente dei dibattiti** 
