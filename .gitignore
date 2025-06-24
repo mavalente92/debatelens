@@ -161,5 +161,6 @@ assets/temp/
 *.flac
 
 # Configuration files with sensitive data
+config.js
 config.json
 secrets.json 
