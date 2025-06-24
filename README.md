@@ -7,16 +7,16 @@ DebateLens è un'applicazione web avanzata che utilizza l'intelligenza artificia
 ## 🖼️ Demo dell'Applicazione
 
 ### Panoramica Generale e Grafico Radar
-![DebateLens Overview](./assets/demo-overview.png)
+![DebateLens Overview](./assets/demo-overview.png.jpg)
 
 ### Analisi Dettagliata per Speaker
 <div align="center">
-  <img src="./assets/demo-meloni.png" alt="Analisi Giorgia Meloni" width="45%" />
-  <img src="./assets/demo-conte.png" alt="Analisi Giuseppe Conte" width="45%" />
+  <img src="./assets/demo-meloni.png.jpg" alt="Analisi Giorgia Meloni" width="45%" />
+  <img src="./assets/demo-conte.png.jpg" alt="Analisi Giuseppe Conte" width="45%" />
 </div>
 
 ### Riepilogo Comparativo Finale
-![DebateLens Summary](./assets/demo-summary.png)
+![DebateLens Summary](./assets/demo-summary.png.jpg)
 
 > **Esempio di Analisi**: Le immagini sopra mostrano un'analisi reale del dibattito "Giorgia Meloni vs Giuseppe Conte" con punteggi dettagliati per ogni metrica. Il sistema ha valutato Meloni con una media di **6.7/10** e Conte con **5.3/10**, evidenziando differenze significative in rigore tecnico, uso di dati e orientamento pratico.
 
@@ -146,10 +146,10 @@ debatelens/
 ├── ⚙️ config.js               # Configurazione
 ├── 📦 package.json            # Dipendenze Node.js
 ├── 🖼️ assets/                 # Immagini e demo
-│   ├── demo-overview.png      # Screenshot panoramica
-│   ├── demo-meloni.png        # Analisi speaker 1
-│   ├── demo-conte.png         # Analisi speaker 2
-│   └── demo-summary.png       # Riepilogo finale
+│   ├── demo-overview.png.jpg  # Screenshot panoramica
+│   ├── demo-meloni.png.jpg    # Analisi speaker 1
+│   ├── demo-conte.png.jpg     # Analisi speaker 2
+│   └── demo-summary.png.jpg   # Riepilogo finale
 ├── 🔧 routes/                 # API endpoints
 │   ├── analysis.js            # Endpoint analisi
 │   ├── upload.js              # Gestione upload
