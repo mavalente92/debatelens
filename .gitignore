@@ -133,6 +133,11 @@ dist/
 assets/uploads/
 assets/temp/
 
+# Keep demo images for GitHub README
+!assets/demo-*.png
+!assets/demo-*.jpg
+!assets/logo.*
+
 # Database files (for future use)
 *.db
 *.sqlite

@@ -4,7 +4,21 @@
 
 DebateLens è un'applicazione web avanzata che utilizza l'intelligenza artificiale per analizzare e confrontare le performance comunicative dei partecipanti in dibattiti politici, scientifici e mediatici.
 
-![DebateLens Demo](https://via.placeholder.com/800x400/0f172a/ffffff?text=DebateLens+Demo)
+## 🖼️ Demo dell'Applicazione
+
+### Panoramica Generale e Grafico Radar
+![DebateLens Overview](./assets/demo-overview.png)
+
+### Analisi Dettagliata per Speaker
+<div align="center">
+  <img src="./assets/demo-meloni.png" alt="Analisi Giorgia Meloni" width="45%" />
+  <img src="./assets/demo-conte.png" alt="Analisi Giuseppe Conte" width="45%" />
+</div>
+
+### Riepilogo Comparativo Finale
+![DebateLens Summary](./assets/demo-summary.png)
+
+> **Esempio di Analisi**: Le immagini sopra mostrano un'analisi reale del dibattito "Giorgia Meloni vs Giuseppe Conte" con punteggi dettagliati per ogni metrica. Il sistema ha valutato Meloni con una media di **6.7/10** e Conte con **5.3/10**, evidenziando differenze significative in rigore tecnico, uso di dati e orientamento pratico.
 
 ## ✨ Caratteristiche Principali
 
@@ -27,10 +41,11 @@ DebateLens è un'applicazione web avanzata che utilizza l'intelligenza artificia
 6. **Approccio Divulgativo**: Capacità di rendere accessibili concetti complessi
 
 ### 📈 **Visualizzazione**
-- **Grafici Radar**: Confronto interattivo delle performance
-- **Tabelle Dettagliate**: Punteggi e spiegazioni per categoria
-- **Export PDF**: Report professionali completi
+- **Grafici Radar**: Confronto interattivo delle performance con visualizzazione esagonale
+- **Tabelle Dettagliate**: Punteggi colorati e spiegazioni per ogni categoria
+- **Export PDF**: Report professionali completi con grafici ad alta risoluzione
 - **Download Trascrizioni**: File TXT con analisi complete
+- **Riepilogo Comparativo**: Tabella finale con medie generali per speaker
 
 ## 🚀 Installazione e Setup
 
@@ -130,6 +145,11 @@ debatelens/
 ├── 🚀 server.js               # Server Express
 ├── ⚙️ config.js               # Configurazione
 ├── 📦 package.json            # Dipendenze Node.js
+├── 🖼️ assets/                 # Immagini e demo
+│   ├── demo-overview.png      # Screenshot panoramica
+│   ├── demo-meloni.png        # Analisi speaker 1
+│   ├── demo-conte.png         # Analisi speaker 2
+│   └── demo-summary.png       # Riepilogo finale
 ├── 🔧 routes/                 # API endpoints
 │   ├── analysis.js            # Endpoint analisi
 │   ├── upload.js              # Gestione upload
