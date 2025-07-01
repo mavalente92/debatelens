@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DebateLens - Analisi Intelligente dei Dibattiti</title>
+    <meta name="description" content="Analizza e confronta il modo in cui i partecipanti si esprimono durante dibattiti politici, scientifici e mediatici utilizzando l'AI">
+    <link rel="stylesheet" href="styles.css?v=2000">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Librerie per PDF Export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+</head>
+<body>
+
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>Analizza i dibattiti con l'intelligenza artificiale</h1>
+            <p class="subtitle">
+                DebateLens utilizza modelli linguistici avanzati per confrontare stile comunicativo, 
+                rigore tecnico e approccio argomentativo di speaker in dibattiti politici, scientifici e mediatici.
+            </p>
+            <div style="display: flex; gap: 1rem; justify-content: center; margin-top: 2rem;">
+                <button class="btn btn-primary" onclick="scrollToAnalyze()">
+                    Analizza Dibattito
+                </button>
+                <button class="btn btn-secondary" onclick="showDemo()">
+                    Vedi Demo
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <h2 style="text-align: center; font-size: 1.75rem; font-weight: 600; margin-bottom: 3rem; color: var(--text-primary);">Caratteristiche principali</h2>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🎥</div>
+                    <h3>Analisi Video</h3>
+                    <p>Carica video da YouTube o file locali. La trascrizione automatica converte l'audio in testo per l'analisi.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📝</div>
+                    <h3>Analisi Testuale</h3>
+                    <p>Analizza direttamente testi, articoli, trascrizioni o qualsiasi contenuto scritto.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Metriche Avanzate</h3>
+                    <p>Valuta rigore tecnico, uso di dati, stile comunicativo, focalizzazione e orientamento pratico.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📊</div>
+                    <h3>Visualizzazione</h3>
+                    <p>Grafici radar interattivi per confrontare facilmente i diversi aspetti comunicativi.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🤖</div>
+                    <h3>AI Avanzata</h3>
+                    <p>Utilizza modelli linguistici di ultima generazione per analisi approfondite e accurate.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⚡</div>
+                    <h3>Risultati Rapidi</h3>
+                    <p>Ottieni analisi complete in pochi minuti, con spiegazioni dettagliate per ogni metrica.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Analysis Form -->
+    <section id="analyze" class="analysis-section">
+        <div class="container">
+            <div class="form-container">
+                <div class="form-header">
+                    <h2>Inizia la tua analisi</h2>
+                    <p>Scegli il tipo di contenuto da analizzare e inizia subito il confronto</p>
+                </div>
+                
+                <div class="tabs">
+                    <button class="tab-btn active" data-tab="video">Video</button>
+                    <button class="tab-btn" data-tab="text">Testo</button>
+                </div>
+
+                <form id="analysisForm">
+                    <!-- Video Tab -->
+                    <div class="tab-content active" id="video-tab">
+                        <div class="form-group">
+                            <label for="videoUrl">URL Video YouTube</label>
+                            <input type="url" id="videoUrl" placeholder="https://youtube.com/watch?v=...">
+                        </div>
+                        
+                        <div style="text-align: center; margin: 1.5rem 0; color: var(--text-muted); font-size: 0.9rem;">
+                            oppure
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="videoFile">Carica file video/audio</label>
+                            <div class="file-upload">
+                                <input type="file" id="videoFile" accept="video/*,audio/*">
+                                <div class="file-upload-content">
+                                    <svg class="upload-icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path>
+                                    </svg>
+                                    <p>Trascina qui il file o clicca per selezionare</p>
+                                    <p class="file-info">MP4, MP3, WAV fino a 100MB</p>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="videoSpeakers">Partecipanti (separati da virgola)</label>
+                                <input type="text" id="videoSpeakers" placeholder="es: Mario Rossi, Giulia Bianchi">
+                            </div>
+                            <div class="form-group">
+                                <label for="videoTopic">Argomento del dibattito</label>
+                                <input type="text" id="videoTopic" placeholder="es: Intelligenza Artificiale, Ambiente">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="videoTitle">Titolo (opzionale)</label>
+                            <input type="text" id="videoTitle" placeholder="es: Dibattito sull'AI">
+                        </div>
+                    </div>
+
+                    <!-- Text Tab -->
+                    <div class="tab-content" id="text-tab">
+                        <div class="form-group">
+                            <label for="textContent">Testo da analizzare</label>
+                            <textarea id="textContent" rows="6" placeholder="Incolla qui il testo del dibattito, articolo o trascrizione..."></textarea>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="textSpeakers">Partecipanti (separati da virgola)</label>
+                                <input type="text" id="textSpeakers" placeholder="es: Mario Rossi, Giulia Bianchi">
+                            </div>
+                            <div class="form-group">
+                                <label for="textTopic">Argomento del dibattito</label>
+                                <input type="text" id="textTopic" placeholder="es: Intelligenza Artificiale, Ambiente">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="textTitle">Titolo (opzionale)</label>
+                            <input type="text" id="textTitle" placeholder="es: Dibattito sull'AI">
+                        </div>
+                    </div>
+
+                    <div style="text-align: center; margin-top: 2rem;">
+                        <button type="submit" class="btn btn-primary">
+                            <span class="btn-text">Inizia Analisi</span>
+                            <div class="btn-loader" style="display: none;">
+                                <div class="spinner"></div>
+                            </div>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <p>© 2025 DebateLens - Analisi Intelligente dei Dibattiti</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Sezione Risultati (nascosta inizialmente) -->
+    <div id="results-section" class="results-section" style="display: none;">
+        <div class="container">
+            <div class="results-header">
+                <h2>📊 Risultati Analisi</h2>
+                <div class="export-buttons">
+                    <button id="download-transcript" class="btn btn-modern">
+                        📄 Scarica Trascrizione
+                    </button>
+                    <button id="export-pdf" class="btn btn-modern">
+                        📑 Esporta PDF
+                    </button>
+                </div>
+            </div>
+            
+            <div id="analysis-results" class="analysis-results">
+                <!-- I risultati verranno inseriti qui -->
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
